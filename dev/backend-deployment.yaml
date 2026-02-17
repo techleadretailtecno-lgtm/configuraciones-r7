@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  namespace: dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+      - name: backend
+        image: retailfactory/backend-r7:latest
+        ports:
+        - containerPort: 3001
+
+        env:
+        # -------- RABBITMQ --------
+        - name: RABBITMQ_HOST
+          value: "rabbitmq.default.svc.cluster.local"
+        - name: RABBITMQ_PORT
+          value: "5672"
+        - name: RABBITMQ_USER
+          value: "guest"
+        - name: RABBITMQ_PASS
+          value: "guest"
+
+        # -------- REDIS --------
+        - name: REDIS_HOST
+          value: "redis.default.svc.cluster.local"
+        - name: REDIS_PORT
+          value: "6379"
+
